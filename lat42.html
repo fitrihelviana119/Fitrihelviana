@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penghitung Usia</title>
+</head>
+<body>
+
+    <label for="tanggalLahir">04-04-2008:</label>
+    <input type="date" id="tanggalLahir" value="2008-04-04">
+
+    <p id="hasil"></p>
+
+    <script>
+        const inputTanggal = document.getElementById("tanggalLahir");
+        const hasil = document.getElementById("hasil");
+
+        function hitungUsia() {
+            if (inputTanggal.value === "") {
+                hasil.textContent = "";
+                return;
+            }
+
+            const lahir = new Date(inputTanggal.value);
+            const sekarang = new Date();
+
+            if (lahir > sekarang) {
+                hasil.textContent = "Tanggal lahir tidak valid!";
+                return;
+            }
+
+            let tahun = sekarang.getFullYear() - lahir.getFullYear();
+            let bulan = sekarang.getMonth() - lahir.getMonth();
+            let hari = sekarang.getDate() - lahir.getDate();
+
+            if (hari < 0) {
+                bulan--;
+                const hariBulanSebelumnya = new Date(
+                    sekarang.getFullYear(),
+                    sekarang.getMonth(),
+                    0
+                ).getDate();
+
+                hari += hariBulanSebelumnya;
+            }
+
+            if (bulan < 0) {
+                tahun--;
+                bulan += 12;
+            }
+
+            hasil.textContent =
+                "Kamu sudah berusia " + tahun + " tahun " +
+                bulan + " bulan " + hari + " hari.";
+        }
+
+        inputTanggal.addEventListener("input", hitungUsia);
+
+        hitungUsia();
+    </script>
+
+</body>
+</html>
