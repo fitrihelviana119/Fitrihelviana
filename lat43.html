@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penilaian Huruf Mutu</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 85%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #hasil {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        #hurufMutu {
+            font-size: 45px;
+            font-weight: bold;
+        }
+
+        .nilai-A {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .nilai-B {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .nilai-C {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .nilai-D {
+            background-color: #ffe0b2;
+            color: #8a4b08;
+        }
+
+        .nilai-E {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .error {
+            display: none;
+            color: red;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Penilaian Huruf Mutu</h2>
+
+        <label for="nama">Nama Mahasiswa:</label>
+        <input type="text" id="nama" placeholder="Masukkan nama kamu">
+
+        <label for="nilai">Nilai Akhir:</label>
+        <input
+            type="text"
+            id="nilai"
+            inputmode="decimal"
+            placeholder="Masukkan nilai 0-100"
+        >
+
+        <button onclick="hitungNilai()">Hitung Nilai</button>
+
+        <div id="error" class="error"></div>
+
+        <div id="hasil">
+            <p id="namaHasil"></p>
+            <div id="hurufMutu"></div>
+            <p id="keterangan"></p>
+        </div>
+    </div>
+
+    <script>
+        function hitungNilai() {
+            const nama = document.getElementById("nama").value.trim();
+            const inputNilai = document.getElementById("nilai").value.trim();
+
+            const error = document.getElementById("error");
+            const hasil = document.getElementById("hasil");
+
+            error.style.display = "none";
+            hasil.style.display = "none";
+
+            function tampilkanError(pesan) {
+                error.textContent = pesan;
+                error.style.display = "block";
+            }
+
+            if (nama === "") {
+                tampilkanError("Nama mahasiswa harus diisi!");
+                return;
+            }
+
+            if (inputNilai === "" ||
+                !/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(inputNilai)) {
+                tampilkanError("Error! Nilai harus berupa angka.");
+                return;
+            }
+
+            const nilai = Number(inputNilai);
+
+            if (nilai < 0) {
+                tampilkanError("Error! Nilai tidak boleh negatif.");
+                return;
+            }
+
+            if (nilai > 100) {
+                tampilkanError("Error! Nilai tidak boleh melebihi 100.");
+                return;
+            }
+
+            let huruf;
+            let keterangan;
+
+            if (nilai < 49.5) {
+                huruf = "E";
+                keterangan = "Tidak Lulus";
+            } else if (nilai < 59.5) {
+                huruf = "D";
+                keterangan = "Kurang";
+            } else if (nilai < 74.5) {
+                huruf = "C";
+                keterangan = "Cukup";
+            } else if (nilai < 84.5) {
+                huruf = "B";
+                keterangan = "Baik";
+            } else {
+                huruf = "A";
+                keterangan = "Sangat Baik";
+            }
+
+            document.getElementById("namaHasil").textContent =
+                "Nama: " + nama;
+
+            document.getElementById("hurufMutu").textContent =
+                huruf;
+
+            document.getElementById("keterangan").textContent =
+                "Nilai akhir: " + nilai + " | " + keterangan;
+
+            hasil.className = "nilai-" + huruf;
+            hasil.style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
